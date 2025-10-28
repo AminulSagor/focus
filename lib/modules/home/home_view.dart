@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'home_controller.dart';
 
-class HomeView extends StatelessWidget {
-  final controller = Get.put(HomeController());
+class HomeView extends GetView<HomeController> {
+  const HomeView({super.key});
 
   void _showAddNumberSheet(BuildContext context) {
     final nameController = TextEditingController();
@@ -27,13 +27,18 @@ class HomeView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Add Important Number", style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold)),
+            Text(
+              "Add Important Number",
+              style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 20.h),
             TextField(
               controller: nameController,
               decoration: InputDecoration(
                 hintText: "Name",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
             ),
             SizedBox(height: 12.h),
@@ -41,7 +46,9 @@ class HomeView extends StatelessWidget {
               controller: numberController,
               decoration: InputDecoration(
                 hintText: "Phone Number",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
               keyboardType: TextInputType.phone,
             ),
@@ -51,7 +58,9 @@ class HomeView extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: "Message to Show",
                 helperText: "E.g., Dad is calling. Check now.",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
               maxLines: 2,
             ),
@@ -61,6 +70,10 @@ class HomeView extends StatelessWidget {
               height: 48.h,
               child: ElevatedButton(
                 onPressed: () {
+                  if (nameController.text.isEmpty &&
+                      numberController.text.isEmpty) {
+                    return;
+                  }
                   controller.contacts.add({
                     "name": nameController.text,
                     "number": numberController.text,
@@ -70,7 +83,9 @@ class HomeView extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                 ),
                 child: Text("Save", style: TextStyle(fontSize: 16.sp)),
               ),
@@ -81,7 +96,11 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  void _showUpdateMessageSheet(BuildContext context, int index, String oldMessage) {
+  void _showUpdateMessageSheet(
+    BuildContext context,
+    int index,
+    String oldMessage,
+  ) {
     final updateController = TextEditingController(text: oldMessage);
 
     showModalBottomSheet(
@@ -104,7 +123,9 @@ class HomeView extends StatelessWidget {
               controller: updateController,
               maxLines: 2,
               decoration: InputDecoration(
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.r)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
               ),
               style: TextStyle(fontSize: 18.sp),
             ),
@@ -120,7 +141,9 @@ class HomeView extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                 ),
                 child: Text("Update", style: TextStyle(fontSize: 16.sp)),
               ),
@@ -142,59 +165,65 @@ class HomeView extends StatelessWidget {
             children: [
               Text(
                 'Numbers',
-                style: TextStyle(
-                  fontSize: 28.sp,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 28.sp, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16.h),
               Expanded(
-                child: Obx(() => ListView.separated(
-                  itemCount: controller.contacts.length,
-                  separatorBuilder: (_, __) => SizedBox(height: 12.h),
-                  itemBuilder: (context, index) {
-                    final item = controller.contacts[index];
-                    return GestureDetector(
-                      onTap: () => _showUpdateMessageSheet(context, index, item['message'] ?? ''),
-                      child: Container(
-                        padding: EdgeInsets.all(16.w),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 4,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
+                child: Obx(
+                  () => ListView.separated(
+                    itemCount: controller.contacts.length,
+                    separatorBuilder: (_, __) => SizedBox(height: 12.h),
+                    itemBuilder: (context, index) {
+                      final item = controller.contacts[index];
+                      return GestureDetector(
+                        onTap: () => _showUpdateMessageSheet(
+                          context,
+                          index,
+                          item['message'] ?? '',
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              item['name'] ?? '',
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
+                        child: Container(
+                          padding: EdgeInsets.all(16.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12.r),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
                               ),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              item['number'] ?? '',
-                              style: TextStyle(fontSize: 16.sp),
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              item['message'] ?? '',
-                              style: TextStyle(fontSize: 14.sp, color: Colors.black87),
-                            ),
-                          ],
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                item['name'] ?? '',
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                item['number'] ?? '',
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                item['message'] ?? '',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                )),
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),

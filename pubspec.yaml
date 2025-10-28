@@ -1,14 +1,12 @@
 name: focus
 description: "A new Flutter project."
 
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 version: 1.0.0+1
 
 environment:
   sdk: ^3.8.0-278.2.beta
-
 
 dependencies:
   flutter:
@@ -20,16 +18,17 @@ dependencies:
   firebase_core: ^2.25.4
   firebase_auth: ^4.17.5 # if using auth
   cloud_firestore: ^4.13.5 # if using Firestore
+  permission_handler: ^12.0.1
+  flutter_background_service: ^5.1.0
+  flutter_background_service_android: ^6.3.1
+  flutter_local_notifications: ^19.5.0
+  flutter_broadcast_receiver: ^0.2.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
   flutter_lints: ^5.0.0
 
-
 flutter:
-
   uses-material-design: true
-

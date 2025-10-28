@@ -15,7 +15,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.home,
       page: () => HomeView(),
-      binding: BindingsBuilder(() => Get.put(HomeController())),
+      binding: BindingsBuilder(() => Get.lazyPut(() => HomeController())),
     ),
   ];
 }
